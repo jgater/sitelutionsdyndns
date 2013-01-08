@@ -5,5 +5,5 @@
   "description": "a node.js script to update sitelutions dynamic dns",
   "dependencies" : {
     "coffee-script": "1.3.x"
-  },
+  }
 }
