@@ -1,0 +1,15 @@
+settings = {}
+
+# sitelutions login details
+settings.username = "email@example.com"
+settings.password = "password"
+
+# separate multiple sitelutions dynamic record ids with commas
+settings.records = "1234567"
+
+//-----------------------------------
+// Do not make changes below here
+//-----------------------------------
+
+
+module.exports = settings;
