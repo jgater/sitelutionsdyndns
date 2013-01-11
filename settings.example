@@ -7,9 +7,13 @@ settings.password = "password"
 # separate multiple sitelutions dynamic record ids with commas
 settings.records = "1234567"
 
-//-----------------------------------
-// Do not make changes below here
-//-----------------------------------
+
+
+
+
+#----------------------------------
+# Do not make changes below here
+#----------------------------------
 
 
 module.exports = settings;
