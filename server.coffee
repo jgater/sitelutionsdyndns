@@ -16,8 +16,8 @@ settings = {
 	
 	# external site for checking IPv4 - response must include your IP as the first literal IPv4 address
 	# alternative providers:
-	# http://icanhazip.com
 	# http://my-ip.heroku.com
+	# http://icanhazip.com
 	# http://whats-my-ip.herokuapp.com/text
 	# http://ipfacts.info
 	checker: "http://my-ip.heroku.com"
@@ -65,7 +65,7 @@ class Fetcher extends EventEmitter
 	# PRIVATE METHODS
 
 	_extractIP: (response) -> 
-		regex = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])$"
+		regex = "(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])"
 		# force response to string type
 		response += ""
 		result = response.match regex
