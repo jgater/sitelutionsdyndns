@@ -2,7 +2,7 @@ Dynamic DNS updater for sitelutions.com
 =======================================
 
 This is a simple coffeescript that runs regularly to check your 'real' external IP address, and then update your hosted domain DNS records
-on sitelutions.com as and when it updates.
+on sitelutions.com as and when it updates. Tested on OSX and linux.
 
 Quick start
 ------------
@@ -13,12 +13,11 @@ Quick start
 - edit the script with your login and password for sitelutions, and the dynamic DNS record numbers for the DNS records you wish to update
 - run server.coffee with `coffee server.coffee`
 - optional: download [forever](http://github.com/nodejitsu/forever) using `npm install -g forever` as root
-- then run `forever start -c coffee server.coffee`
-- `forever list` will show the script running in the background, and the log file status updates are written to
+- optional: then run `forever start -c coffee server.coffee`
+- optional: `forever list` will show the script running in the background, and the log file status updates are written to
 
 MIT Licence
 -----------
-
 
 Copyright (C) 2013 James Gater
 
