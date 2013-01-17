@@ -22,6 +22,9 @@ settings = {
 	# ipfacts.info
 	checker: "my-ip.heroku.com"
 
+	# length of time between IP checks, in seconds
+	time: 60
+
 }
 
 # #######################
@@ -42,7 +45,8 @@ https = require "https"
 #
 
 class Fetcher extends EventEmitter
-	constructor: (@username, @password, @records, @checker) ->
+	constructor: (@username, @password, @records, @checker, time) ->
+		@repeatTime = parseInt time
 		@cachedIP = ""
 		# data response from checker 
 		@on "checkResponseSuccess", @_extractIP
@@ -51,7 +55,18 @@ class Fetcher extends EventEmitter
 
 	# PUBLIC METHODS
 
+	continuousCheck: ->
+		if @repeatTime > 0
+			# schedule next IP check
+			setTimeout (=>
+				@checkIP()
+			), (@repeatTime * 1000)	
+
 	checkIP: ->	
+		# first call continousCheck to set next check
+		@continuousCheck()
+
+		# check IP
 		req = http.get("http://"+settings.checker, (response) =>
 			# handle the response
 			res_data = ""
@@ -70,7 +85,6 @@ class Fetcher extends EventEmitter
 		# force response to string type
 		response += ""
 		result = response.match regex
-		console.log result[0]
 		@emit "extractIPSuccess", result[0] if result
 		console.log "IP address not found from IP address site" unless result
 
@@ -95,7 +109,9 @@ class Fetcher extends EventEmitter
 		for record, index in recordsArr
 			res = responseArr[index]
 			if res is "success"
-				console.log "record #{record} updated successfully to #{IP}" 
+				console.log "record #{record} updated successfully to #{IP}"
+				# record set successfully, can now update cached IP so won't update again until our checked IP changes
+				@cachedIP = IP
 			else
 				console.log "record #{record} was not updated to #{IP}; reson given was \"#{res}\""
 
@@ -108,7 +124,7 @@ class Fetcher extends EventEmitter
 # main code
 #		
 
-fetcher = new Fetcher settings.username, settings.password, settings.records, settings.checker
+fetcher = new Fetcher settings.username, settings.password, settings.records, settings.checker, settings.time
 
 fetcher.checkIP() 
 
