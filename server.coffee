@@ -50,21 +50,16 @@ class Fetcher extends EventEmitter
 		@cachedIP = ""
 		# data response from checker 
 		@on "checkResponseSuccess", @_extractIP
+		# IP address found from checker
 		@on "extractIPSuccess", @_submitIP
+		# IP address submitted to sitelutions for update
 		@on "submitSuccess", @_submitCheck
 
 	# PUBLIC METHODS
 
-	continuousCheck: ->
-		if @repeatTime > 0
-			# schedule next IP check
-			setTimeout (=>
-				@checkIP()
-			), (@repeatTime * 1000)	
-
 	checkIP: ->	
-		# first call continousCheck to set next check
-		@continuousCheck()
+		# first call continuousCheck to set next check
+		@_continuousCheck()
 
 		# check IP
 		req = http.get("http://"+settings.checker, (response) =>
@@ -78,6 +73,13 @@ class Fetcher extends EventEmitter
 			console.log "IP address site request error: " + err.message
 
 	# PRIVATE METHODS
+
+	_continuousCheck: ->
+		if @repeatTime > 0
+			# schedule next IP check
+			setTimeout (=>
+				@checkIP()
+			), (@repeatTime * 1000)	
 
 	_extractIP: (response) -> 
 		# IPv4 regex
@@ -113,7 +115,7 @@ class Fetcher extends EventEmitter
 				# record set successfully, can now update cached IP so won't update again until our checked IP changes
 				@cachedIP = IP
 			else
-				console.log "record #{record} was not updated to #{IP}; reson given was \"#{res}\""
+				console.log "record #{record} was not updated to #{IP}; reason given was \"#{res}\""
 
 
 
