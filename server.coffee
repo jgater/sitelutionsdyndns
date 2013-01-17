@@ -16,11 +16,11 @@ settings = {
 	
 	# external site for checking IPv4 - response must include your IP as the first literal IPv4 address
 	# alternative providers:
-	# http://my-ip.heroku.com
-	# http://icanhazip.com
-	# http://whats-my-ip.herokuapp.com/text
-	# http://ipfacts.info
-	checker: "http://my-ip.heroku.com"
+	# my-ip.heroku.com
+	# icanhazip.com
+	# whats-my-ip.herokuapp.com/text
+	# ipfacts.info
+	checker: "my-ip.heroku.com"
 
 }
 
@@ -52,7 +52,7 @@ class Fetcher extends EventEmitter
 	# PUBLIC METHODS
 
 	checkIP: ->	
-		req = http.get(settings.checker, (response) =>
+		req = http.get("http://"+settings.checker, (response) =>
 			# handle the response
 			res_data = ""
 			response.on "data", (chunk) ->
@@ -65,10 +65,12 @@ class Fetcher extends EventEmitter
 	# PRIVATE METHODS
 
 	_extractIP: (response) -> 
-		regex = "(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])"
+		# IPv4 regex
+		regex = /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
 		# force response to string type
 		response += ""
 		result = response.match regex
+		console.log result[0]
 		@emit "extractIPSuccess", result[0] if result
 		console.log "IP address not found from IP address site" unless result
 
@@ -95,7 +97,7 @@ class Fetcher extends EventEmitter
 			if res is "success"
 				console.log "record #{record} updated successfully to #{IP}" 
 			else
-				console.log "record #{record} was not updated; reson given was \"#{res}\""
+				console.log "record #{record} was not updated to #{IP}; reson given was \"#{res}\""
 
 
 
